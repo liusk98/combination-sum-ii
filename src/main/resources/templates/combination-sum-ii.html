@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Add Two Numbers</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+</head>
+<body>
+    <div>
+        <h1>主页</h1>
+    </div>
+    <div>
+        <button class="layui-btn" onclick="addNumber()">增加一个数</button>
+    </div>
+    <div id="numberList">
+        <input class="layui-input" type="number" name="combination" value="0" />
+    </div>
+    <div>
+        <label class="layui-form-label" for="result">需要计算的结果</label>
+        <input type="number" id="result" value="">
+    </div>
+    <div>
+        <button class="layui-btn" onclick="requeryResult()">开始计算</button>
+    </div>
+    <div id="resultList">
+
+    </div>
+</body>
+</html>
+<script src="plugins/layui/layui.all.js"></script>
+<script>
+    let $;
+    let layer;
+    layui.use('layer', function () {
+        $ = layui.$;
+        layer = layui.layer;
+    });
+
+    function addNumber() {
+        let number = '<input class="layui-input" type="number" name="combination" value="0" />';
+        $("#numberList").append(number);
+    }
+
+    /**
+     * 请求计算结果
+     */
+    function requeryResult() {
+        let target =  $("#result").val();
+        if (target == null) {
+            layer.msg("请输入目标结果!");
+            return;
+        }
+        let nums = [];
+        $(":input[name='combination']").each(function (index, item) {
+            nums.push(item.value);
+        });
+        $.ajax({
+            url: "combination",
+            data: {nums, "target": target},
+            type: "POST",
+            dataType: "json",
+            success: function (result) {
+                let data = result.result;
+                $("#resultList").html("");
+                $(data).each(function (index, item) {
+                    console.log(item);
+                    let div = '<div>';
+                    let result = '<span> ' + item.result + '</span></br>';
+                    let res = '<span> ' + item.res + '</span>';
+                    div = div + result + res + "</div>";
+                    $("#resultList").append(div);
+                });
+            }
+        })
+    }
+</script>
