@@ -24,11 +24,11 @@ public class CombinationSumIiImpl implements CombinationSumIi {
             for (int i = 0; i < calculation.size(); i++) {
                 Map<String, Object> resultMap = new HashMap<>();
                 resultMap.put("result", "第" + (i + 1) + "个结果集");
-                StringBuffer doubles = new StringBuffer();
-                for (Double aDouble : calculation.get(i)) {
-                    doubles.append(aDouble + "   ");
-                }
-                resultMap.put("res", doubles.toString());
+                StringBuilder doubles = new StringBuilder();
+                calculation.get(i).forEach(aDouble -> {
+                    doubles.append(aDouble).append(" + ");
+                });
+                resultMap.put("res", doubles.deleteCharAt(doubles.length() - 2).toString());
                 resultList.add(resultMap);
             }
             result.setCode(ResultResponse.SUCCESS);
