@@ -21,6 +21,8 @@ public class CombinationSumIiImpl implements CombinationSumIi {
         try {
             List<Map<String, Object>> resultList = new ArrayList<>();
             List<List<Double>> calculation = this.combinationSum2(candidates, target);
+//            List<List<Double>> calculation = new ArrayList<>();
+//            helper(calculation, new ArrayList<>(), candidates, target, 0);
             for (int i = 0; i < calculation.size(); i++) {
                 Map<String, Object> resultMap = new HashMap<>();
                 resultMap.put("result", "第" + (i + 1) + "个结果集");
@@ -71,6 +73,29 @@ public class CombinationSumIiImpl implements CombinationSumIi {
             }
         } else {
             return;
+        }
+    }
+
+    /**
+     *
+     * 组合总和可使用重复值 leetcode 39
+     * @param result 结果集
+     * @param temp 路径
+     * @param candidates 给定的无重复元素的数组
+     * @param target 目标
+     * @param index 索引
+     */
+    private void helper(List<List<Double>> result, List<Double> temp, double[] candidates, double target, int index) {
+        if (target <= 0) {
+            if (target == 0) {
+                result.add(new ArrayList<>(temp));
+            }
+            return;
+        }
+        for (int i = index; i < candidates.length; i++) {
+            temp.add(candidates[i]);
+            helper(result, temp, candidates, target - candidates[i], i);
+            temp.remove(temp.size() - 1);
         }
     }
 }
